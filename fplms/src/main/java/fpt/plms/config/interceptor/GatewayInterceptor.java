@@ -88,8 +88,10 @@ public class GatewayInterceptor implements HandlerInterceptor {
 //            return emailVerifyDTO;
         }
         emailVerifyDTO = getEmailVerifiedEntity(accessToken);
-        if (emailVerifyDTO.getEmail() == null)
+        if (emailVerifyDTO == null || emailVerifyDTO.getEmail() == null) {
             throw new WrongTokenException();
+        }
+
         emailVerifyDTO.setRole(emailVerifyDTO.getRole().trim().toUpperCase());
         if (adminEmail.equals(emailVerifyDTO.getEmail())) {
             emailVerifyDTO.setRole(emailVerifyDTO.getRole() + GatewayConstant.ROLE_SPLIT_STRING + GatewayConstant.ROLE_ADMIN);
@@ -97,6 +99,7 @@ public class GatewayInterceptor implements HandlerInterceptor {
         logger.info("Path:{} VerifyDTO:{}", servletPath, emailVerifyDTO);
         ApiEntity apiEntity = getMatchingAPI(httpMethod, servletPath);
         if (apiEntity == null) throw new NotFoundApiException();
+        if (!(apiEntity.getRole() == null || apiEntity.getRole().isBlank()))
         verifyRole(apiEntity.getRole(), emailVerifyDTO.getRole());
         logger.info("Request validated. Start forward request to controller");
         return emailVerifyDTO;
@@ -119,9 +122,9 @@ public class GatewayInterceptor implements HandlerInterceptor {
         String[] userRoles = userRole.split(GatewayConstant.ROLE_SPLIT_STRING);
         for (String role : pathRoles)
             for (String accessRole : userRoles)
-            if (role.equals(accessRole)) {
-                return;
-            }
+                if (role.equals(accessRole)) {
+                    return;
+                }
         throw new NoAccessRoleException();
     }
 
