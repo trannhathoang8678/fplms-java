@@ -26,12 +26,8 @@ public class GatewayInterceptor implements HandlerInterceptor {
     @Value("${application.admin.email}")
     private String adminEmail;
 
-
-
     @Value("${api.verify.url}")
     private String verifyUrl;
-
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         try {

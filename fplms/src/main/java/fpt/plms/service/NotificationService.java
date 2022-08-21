@@ -1,5 +1,6 @@
 package fpt.plms.service;
 
+import fpt.plms.config.WebMvcConfiguration;
 import fpt.plms.repository.GroupRepository;
 import fpt.plms.repository.entity.Group;
 import org.apache.logging.log4j.LogManager;
@@ -32,7 +33,7 @@ public class NotificationService {
 
     public void sendNotification(NotificationDTO notification) {
         logger.info("{}{}", SEND_NOTIFICATION_MESSAGE, notification);
-        ResponseEntity response = GatewayInterceptor.getWebClientBuilder().build().post().uri(sendNotificationUrl).contentType(MediaType.APPLICATION_JSON)
+        ResponseEntity response = WebMvcConfiguration.getWebClientBuilder().build().post().uri(sendNotificationUrl).contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON).body(BodyInserters.fromValue(notification)).retrieve().toEntity(String.class).block();
         if (!response.getStatusCode().equals(HttpStatus.CREATED)) {
             logger.warn("{}{}{}", SEND_NOTIFICATION_MESSAGE, "Error when call api: ", response.getStatusCode());

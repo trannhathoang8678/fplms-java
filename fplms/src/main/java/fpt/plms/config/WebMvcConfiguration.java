@@ -1,6 +1,7 @@
 package fpt.plms.config;
 
 import fpt.plms.config.interceptor.GatewayInterceptor;
+import fpt.plms.model.request.GoogleAuthRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +23,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
-
+    @Bean
+    public GoogleAuthRequest googleAuthRequest() {
+        return new GoogleAuthRequest();
+    }
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
         registry.addInterceptor(gatewayInterceptor).excludePathPatterns("/api/management/auth").addPathPatterns("/api/management/**");
