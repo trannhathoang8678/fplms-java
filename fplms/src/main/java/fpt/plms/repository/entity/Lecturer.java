@@ -24,6 +24,10 @@ public class Lecturer {
     private String email;
     @Column(name = "image_url")
     private String imageUrl;
+    @Column
+    private String token;
+    @Column(name = "token_valid_time",insertable = false)
+    private Boolean tokenValidTime;
     @Column(name = "is_disable",insertable = false)
     private Boolean isDisable;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "lecturer")
