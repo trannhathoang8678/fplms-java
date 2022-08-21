@@ -1,6 +1,7 @@
 package fpt.plms.config.interceptor;
 
 
+import fpt.plms.config.WebMvcConfiguration;
 import fpt.plms.config.interceptor.exception.NoAccessRoleException;
 import fpt.plms.config.interceptor.exception.NoTokenException;
 import fpt.plms.config.interceptor.exception.NotFoundApiException;
@@ -25,10 +26,7 @@ public class GatewayInterceptor implements HandlerInterceptor {
     @Value("${application.admin.email}")
     private String adminEmail;
 
-    @Bean
-    public static WebClient.Builder getWebClientBuilder() {
-        return WebClient.builder();
-    }
+
 
     @Value("${api.verify.url}")
     private String verifyUrl;
@@ -129,7 +127,7 @@ public class GatewayInterceptor implements HandlerInterceptor {
     }
 
     private EmailVerifyDTO getEmailVerifiedEntity(String token) {
-        return getWebClientBuilder().build().get().uri(verifyUrl).header(GatewayConstant.AUTHORIZATION_HEADER, token)
+        return WebMvcConfiguration.getWebClientBuilder().build().get().uri(verifyUrl).header(GatewayConstant.AUTHORIZATION_HEADER, token)
                 .retrieve().bodyToMono(EmailVerifyDTO.class).block();
     }
 }
